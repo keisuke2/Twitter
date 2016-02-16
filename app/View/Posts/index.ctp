@@ -3,19 +3,20 @@
 session_start();//すでにコントローラーでスタートしてるからいらないみたい１!
 session_regenerate_id(true);
 */
-/*
+
 if(isset($_SESSION['login'])==false)
 {
 	print'ログインされていません。<br/>';
-	print'<a href="../member_login/member_login.php">ログイン画面へ</a>';
+	print'<a href="../Users/login">ログイン画面へ</a>';
 	exit();
 }
 else
 {
-	//$_SESSION['member_name'];
-	$_SESSION['company_id'];
+	$_SESSION['user_id'];
+	$_SESSION['image'];
+	$_SESSION['name'];
 }
-*/
+
 ?>
 <!DOCTYPE HTML PUBLIC"-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -25,6 +26,7 @@ else
 </head>
 <body>
 	<?php echo $_SESSION['user_id'];?>
+	<?php echo 	$_SESSION['image']; ?>
 	<h4><?php echo $_SESSION['name']; ?> さんログイン中</h4>
 	<form action="<?php echo $this->Html->url('/Posts/add');  ?>"method="POST">
 	<div class="red"><h2>ツイートしてください</h2></div><h4>(50文字以上)</h4><br/>
@@ -53,9 +55,17 @@ else
 <input type="hidden" name="reply_post_id" value="0">
 <?php } ?>
 <input type="submit" value="投稿"></form><br/>
+
+
+<div class="col-md-4" style="border-bottom: 1px solid #EEEEEE">
 <a href="<?php echo '/Posts/index/';?>">ツイート</a><br>
+</div>
+<div class="col-md-4" style="border-bottom: 1px solid #EEEEEE">
 <a href="<?php echo '/Followers/index/';?>">フォロー</a><br>
+</div>
+<div class="col-md-4" style="border-bottom: 1px solid #EEEEEE">
 <a href="<?php echo '/Followers/show/'; ?>">フォロワー</a><br>
+</div><br> 
 	<h3>ツイート</h3><br/>
 <?php foreach ($posts_data as $row): ?>
 	<div id="post_contents">
@@ -64,6 +74,7 @@ else
 				<table>
 					<tr>
 					<td>
+					<?php echo $row['Post']['user_image'];?><br>
 					<?php echo $row['Post']['message'];?><br>
 					<?php echo $row['Post']['user_name'];?>さん<br>
 					<?php echo $row['Post']['created'];?><br>

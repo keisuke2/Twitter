@@ -46,7 +46,8 @@ class PostsController extends AppController
 		}else{
 			$data=array(
 			'message'=>$this->request->data['message'],
-			'user_name'=>$_SESSION['name'],//postのメンバーnameをニックネームに変えたら他の場所も大変になるのかな？2つ作っといたほうがいいかも。
+			'user_name'=>$_SESSION['name'],
+			'user_image'=>$_SESSION['image'],//postのメンバーnameをニックネームに変えたら他の場所も大変になるのかな？2つ作っといたほうがいいかも。
 			'reply_post_id'=>$this->request->data['reply_post_id']
 			);	
 			$id=$this->Post->save($data);

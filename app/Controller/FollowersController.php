@@ -60,8 +60,6 @@ class FollowersController extends AppController
 		$follow_user_data=$this->User->find('all',$options);
 		$this->set('follow_user_data',$follow_user_data);
 	}
-
-
 	public function add(){
 			$id=$this->request->pass[0];
 			$data=array(
@@ -73,24 +71,17 @@ class FollowersController extends AppController
 			$this->Session->setflash($msg);
 			$this->redirect('/Followers/index');
 	}
-
 	public function show(){
 		//自分をフォローしてくれてるユーザーを表示する
-
-
-//followerテーブルでfollow_idが自分と同じIDのユーザーidを取得する
+		//followerテーブルでfollow_idが自分と同じIDのユーザーidを取得する
 		$data=array(
 		'conditions'=>array(
 		'follow_user_id'=>$_SESSION['user_id']
 		)
 		);
-
-
 		$follower_data=$this->Follower->find('all',$data);//自分のidと同じfollow_user_idのデータを取得する
 //idのみ取得したい
-
 		$b=count($follower_data);
-
 		for($i=0; $i<$b; ++ $i){
 			$follower_id[]=$follower_data[$i]['Follower']['follow_user_id'];
 		}

@@ -24,8 +24,7 @@ class UsersController extends AppController
 			setcookie('email','');
 		}
 		}
-		*/
-		
+		*/		
 		if($this->request->is('post'))
 		{
 			//idを保存する　エラー出る可能性あり。
@@ -62,6 +61,16 @@ class UsersController extends AppController
 		$_SESSION['login']=1;
 		$_SESSION['user_id']=$user_data[0]['User']['id'];
 		$_SESSION['name']=$user_data[0]['User']['name'];
+		if($user_data[0]['User']['image']=='')
+		{
+
+		}else{
+			//var_dump($user_data[0]['User']['image']);
+			$user_image=$user_data[0]['User']['image'];
+			$disp_image='<img src="../webroot/user_picture/'.$user_image.'">';
+			$_SESSION['image']=$disp_image;
+
+		}
 		$this->set('user_data',$user_data);
 		$this->redirect('/Posts/index');
 		}
@@ -80,21 +89,26 @@ class UsersController extends AppController
 				$this->redirect('add');
 			}
 			//画像をアップロードする。
-			$fileName = $_FILES['image'];
-			if($fileName)
-
-
-
-
+			$fileName =$this->params['form']['image'];
+			if($fileName['size']>0)
+			{
+				if($fileName['size']>1000000)
+				{
+					echo '画像サイズが大き過ぎます';
+				}
+				else
+				{
+					move_uploaded_file($fileName['tmp_name'],'../webroot/user_picture/'.$fileName['name']);
+				}
+			}
 			$options=array(
 			'conditions'=>array(
 				'email'=>$this->request->data['email']
 				)
-				);
+			);
 			//データベースのなかのusernameとpasswordを引っ張ってくる
 			//もし引っ張ってきた値と入力した値が一致したらログイン成功
 			$user_data= $this->User->find('all',$options);
-
 			if($user_data==true)
 			{
 				$this->Session->setFlash(
@@ -106,6 +120,7 @@ class UsersController extends AppController
 					'email'=>$this->request->data['email'],
 					'name'=>$this->request->data['name'],
 					'password'=>$this->request->data['password'],
+					'image'=>$fileName['name']
 					);
 					$this->User->save($data);
 					$this->Session->setFlash('会員登録しました！');
